@@ -1,0 +1,72 @@
+const express = require("express");
+const app = express();
+const mineflayer = require('mineflayer');
+const Discord = require("discord.js");
+const client = new Discord.Client({intents: ["GUILDS", "GUILD_MESSAGES"]});
+
+const discordBot = new Discord.Client({
+    allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
+    intents: [Discord.Intents.FLAGS.GUILD_MESSAGES],
+});
+let minecraftBot = mineflayer.createBot({
+    host: 'massivecraft.com',
+    username: 'NjMcr',
+    auth: 'microsoft'
+});
+
+const discordServerID = '948995127148425246';
+const chatChannelID = '987349559724372059';
+
+app.listen(3000, () => {
+    console.log("Project is running!");
+})
+
+app.get("/", (req, res) => {
+    res.send ("Hello world!");
+})
+
+discordBot.on('ready', () => {
+    console.log(`The Discord bot ${discordBot.user.username} is ready!`);
+});
+
+minecraftBot.on('login', () => {
+    console.log('Minecraft bot has logged in!');
+});
+
+minecraftBot.on('end', () => {
+    console.log('Minecraft bot disconnected from the server.');
+});
+
+async function toDiscordChat(msg) {
+    await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+    return discordBot.guilds.cache.get(discordServerID).channels.cache.get(chatChannelID).send({
+        content: msg,
+  });
+}
+
+discordBot.on('messageCreate', async (message) => {
+    if (message.channel.id === chatChannelID) {
+    if(message.author.id === '530880318463541248') {
+        minecraftBot.chat(`${message.content}`);
+        toDiscordChat(`[Discord] Nj: ${message}`);
+        await message.delete();
+      }
+    }
+});
+
+minecraftBot.on('chat', (username, message) => {
+    if(username === minecraftBot.username) return;
+    toDiscordChat(`[MC] ${username}: ${message}`);
+})
+
+minecraftBot.on('system', (message) => {
+    if(username === minecraftBot.username) return;
+    toDiscordChat(`[MC] ${username} ${message}`);
+})
+
+minecraftBot.on('game info', (username, message) => {
+    if(username === minecraftBot.username) return;
+    toDiscordChat(`[MC] ${username} ${message}`);
+})
+
+discordBot.login(process.env.token1)
