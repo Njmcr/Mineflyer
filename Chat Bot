@@ -24,6 +24,7 @@ const allyChannelID = '991287583436963943';
 const pmChannelID = '991327518579769394';
 const kingdomChannelID = '991287691205410816';
 const miscChannelID = '991287797203882044';
+const commandsChannelID = '991365232867934208';
 
 app.listen(3000, () => {
   console.log("Project is running!");
@@ -95,6 +96,13 @@ async function toMiscChat(msg) {
   });
 }
 
+async function toCommandsChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(commandsChannelID).send({
+    content: msg,
+  });
+}
+
 discordBot.on('messageCreate', async (message) => {
     if (message.channel.id === chatChannelID) {
       if(message.author.id === '530880318463541248') {
@@ -130,6 +138,12 @@ discordBot.on('messageCreate', async (message) => {
           if(message.author.id === '530880318463541248') {
             bot.chat(`${message.content}`);
             await message.delete();
+          }
+    }  else if (message.channel.id === commandsChannelID) {
+          if(message.author.id === '530880318463541248') {
+            bot.chat(`\/${message.content}`);
+            await message.delete();
+            toCommandsChat(`\/${message}`);
           }
     }
 })
@@ -180,7 +194,7 @@ discordBot.on("message", async (message) => {
         message.channel.send({ embeds: [FactionChat]});
         await message.delete();
       }
-    } else if(message.content.includes("General")) {
+    } else if(message.content.startsWith("\[General")) {
           if(message.channel.id === generalChannelID) {
             const GeneralChat = new MessageEmbed()
               .setColor('#808080')
@@ -189,7 +203,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [GeneralChat]});
             await message.delete();
           }
-    } else if(message.content.includes("Alliance")) {
+    } else if(message.content.startsWith("\[Alliance")) {
           if(message.channel.id === allyChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#800080')
@@ -198,7 +212,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes("Kingdom ")) {
+    } else if(message.content.startsWith("\[Kingdom ")) {
           if(message.channel.id === kingdomChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#249D9F')
@@ -207,7 +221,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes("TO ")) {
+    } else if(message.content.startsWith("TO ")) {
           if(message.channel.id === pmChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#CF9FFF')
@@ -216,7 +230,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes("FROM ")) {
+    } else if(message.content.startsWith("FROM ")) {
           if(message.channel.id === pmChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#CF9FFF')
@@ -225,7 +239,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes("\[Trade ")) {
+    } else if(message.content.startsWith("\[Trade ")) {
           if(message.channel.id === miscChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#DC9200')
@@ -234,7 +248,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes("Recruitment ")) {
+    } else if(message.content.startsWith("\[Recruitment ")) {
           if(message.channel.id === miscChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#FFFF00')
@@ -243,7 +257,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes("\[Help ")) {
+    } else if(message.content.startsWith("\[Help ")) {
           if(message.channel.id === miscChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#8CE2EE')
@@ -252,7 +266,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes("\[PVP ")) {
+    } else if(message.content.startsWith("\[PVP")) {
           if(message.channel.id === miscChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#8B0000')
@@ -261,7 +275,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes("\[Staff ")) {
+    } else if(message.content.startsWith("\[Staff ")) {
           if(message.channel.id === miscChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#FF0000')
@@ -270,7 +284,7 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes(" logged on")) {
+    } else if(message.content.includes(" logged o")) {
         if(message.channel.id === chatChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#FFFFFF')
@@ -279,6 +293,15 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
+    } else if(message.channel.id === commandsChannelID) {
+        if(message.content.startsWith('\/')) {
+            const Chat = new MessageEmbed()
+              .setColor('#808080')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+        }
     }
 });
 
