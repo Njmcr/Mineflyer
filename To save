@@ -1,0 +1,369 @@
+const express = require("express");
+const app = express();
+const mineflayer = require('mineflayer');
+const Discord = require("discord.js");
+const client = new Discord.Client({intents: ["GUILDS", "GUILD_MESSAGES"]});
+const {MessageEmbed} = require('discord.js');
+
+const discordBot = new Discord.Client({
+  allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
+  intents: [Discord.Intents.FLAGS.GUILD_MESSAGES],
+});
+
+let bot = mineflayer.createBot({
+  host: 'test.massivecraft.team',
+  username: 'NjMcr',
+  auth: 'microsoft'
+});
+
+const discordServerID = '948995127148425246';
+const chatChannelID = '987349559724372059';
+const factionChannelID = '991287647135879218';
+const generalChannelID = '991287906058645504';
+const allyChannelID = '991287583436963943';
+const pmChannelID = '991327518579769394';
+const kingdomChannelID = '991287691205410816';
+const miscChannelID = '991287797203882044';
+const commandsChannelID = '991365232867934208';
+const announcementChannelID = '991677008054583326';
+const loginsChannelID = '991676737391968366';
+const staffChannelID = '991697826436362280';
+const functionalChannelID = '991701680297082940';
+
+app.listen(3000, () => {
+  console.log("Project is running!");
+})
+
+app.get("/", (req, res) => {
+  res.send ("Hello world!");
+})
+
+discordBot.on('ready', () => {
+  console.log(`The Discord bot ${discordBot.user.username} is ready!`);
+});
+
+bot.on('login', () => {
+  console.log('Minecraft bot has logged in!');
+});
+
+
+bot.on('end', () => {
+  console.log('Minecraft bot disconnected from the server.');
+});
+
+async function toDiscordChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(chatChannelID).send({
+    content: msg,
+  });
+}
+
+async function toFactionChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(factionChannelID).send({
+    content: msg,
+  });
+}
+
+async function toGeneralChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(generalChannelID).send({
+    content: msg,
+  });
+}
+
+async function toAllyChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(allyChannelID).send({
+    content: msg,
+  });
+}
+
+async function toPmChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(pmChannelID).send({
+    content: msg,
+  });
+}
+
+async function toKingdomChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(kingdomChannelID).send({
+    content: msg,
+  });
+}
+
+async function toMiscChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(miscChannelID).send({
+    content: msg,
+  });
+}
+
+async function toCommandsChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(commandsChannelID).send({
+    content: msg,
+  });
+}
+
+async function toAnnouncementChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(announcementChannelID).send({
+    content: msg,
+  });
+}
+
+
+async function toLoginsChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(loginsChannelID).send({
+    content: msg,
+  });
+}
+
+async function toStaffChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(staffChannelID).send({
+    content: msg,
+  });
+}
+
+async function toFunctionalChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(functionalChannelID).send({
+    content: msg,
+  });
+}
+
+
+discordBot.on('messageCreate', async (message) => {
+    if (message.channel.id === chatChannelID) {
+      if(message.author.id === '530880318463541248') {
+        bot.chat(`${message.content}`);
+        await message.delete();
+      }
+    } else if (message.channel.id === factionChannelID) {
+        if(message.author.id === '530880318463541248') {
+          bot.chat(`f: ${message.content}`);
+          await message.delete();
+      }
+    } else if (message.channel.id === generalChannelID) {
+        if(message.author.id === '530880318463541248') {
+          bot.chat(`g: ${message.content}`);
+          await message.delete();
+        }
+      } else if (message.channel.id === allyChannelID) {
+          if(message.author.id === '530880318463541248') {
+            bot.chat(`a: ${message.content}`);
+            await message.delete();
+          }
+      } else if (message.channel.id === pmChannelID) {
+          if(message.author.id === '530880318463541248') {
+            bot.chat(`${message.content}`);
+            await message.delete();
+          }
+      } else if (message.channel.id === kingdomChannelID) {
+          if(message.author.id === '530880318463541248') {
+            bot.chat(`k: ${message.content}`);
+            await message.delete();
+          }
+      } else if (message.channel.id === miscChannelID) {
+          if(message.author.id === '530880318463541248') {
+            bot.chat(`${message.content}`);
+            await message.delete();
+          }
+    }  else if (message.channel.id === commandsChannelID) {
+          if(message.author.id === '530880318463541248') {
+            bot.chat(`\/${message.content}`);
+            await message.delete();
+            toCommandsChat(`\/${message}`);
+          }
+    }  else if (message.channel.id === staffChannelID) {
+          if(message.author.id === '530880318463541248') {
+            bot.chat(`s: ${message.content}`);
+            await message.delete();
+          }
+    }
+})
+            
+
+bot.on('message', (jsonMsg, position) => {
+  if(position === 'system') {
+    toDiscordChat(`${jsonMsg}`);
+  }  else if(position === 'game_info') {
+      toDiscordChat(`${jsonMsg}`)
+  }  else if(position === 'chat') {
+      const jsonstr = JSON.stringify(jsonMsg);
+      const jsonobj = JSON.parse(jsonstr);
+        if(jsonobj.color === 'dark_green') {
+          toFactionChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'gray') {
+          toGeneralChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'dark_purple') {
+          toAllyChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'light_purple') {
+          toPmChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'dark_aqua') {
+          toKingdomChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'yellow') {
+          toMiscChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'gold') {
+          toMiscChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'aqua') {
+          toMiscChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'dark_red') {
+          toFunctionalChat(`${jsonMsg}`);
+        } else if(jsonobj.color === 'red') {
+          toStaffChat(`${jsonMsg}`);
+        } else toDiscordChat(`${jsonMsg}`)
+    }
+})
+
+discordBot.on("messageCreate", async (message) => {
+  if(message.channel.id === chatChannelID) {
+    if(message.content.includes(' logged o')) {
+      toLoginsChat(message.content);
+      await message.delete();
+    } else if(message.content.startsWith("\[A\]")) {
+      toAnnouncementChat(message.content);
+      await message.delete();
+    }
+  } 
+});
+
+discordBot.on("messageCreate", async (message) => {
+  if(message.channel.id === functionalChannelID) {
+    if(message.content.startsWith("\[C\]")) {
+      toStaffChat(message.content);
+    } else if(message.content.startsWith ("\[PVP ")) {
+      toMiscChat(message.content);
+    }
+  }
+});
+
+
+discordBot.on("messageCreate", async (message) => {
+    if(message.content.includes("Faction")) {
+      if(message.channel.id === factionChannelID) {
+        const FactionChat = new MessageEmbed()
+          .setColor('#00FF00')
+          .setTitle(message.content)
+      
+        message.channel.send({ embeds: [FactionChat]});
+        await message.delete();
+      }
+    } else if(message.content.startsWith("\[General")) {
+          if(message.channel.id === generalChannelID) {
+            const GeneralChat = new MessageEmbed()
+              .setColor('#808080')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [GeneralChat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("\[Alliance")) {
+          if(message.channel.id === allyChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('#800080')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("\[Kingdom ")) {
+          if(message.channel.id === kingdomChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('#249D9F')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("TO ")) {
+          if(message.channel.id === pmChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('FFFFE0')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("FROM ")) {
+          if(message.channel.id === pmChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('#CF9FFF')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("\[Trade ")) {
+          if(message.channel.id === miscChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('#DC9200')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("\[Recruitment ")) {
+          if(message.channel.id === miscChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('#FFFF00')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("\[Help ")) {
+          if(message.channel.id === miscChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('#8CE2EE')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("\[PVP")) {
+          if(message.channel.id === miscChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('#8B0000')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.content.startsWith("\[Staff ")) {
+          if(message.channel.id === staffChannelID) {
+            const Chat = new MessageEmbed()
+              .setColor('#FF0000')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+          }
+    } else if(message.channel.id === loginsChannelID) {
+        if(message.content.includes(' logged o')) {
+            const Chat = new MessageEmbed()
+              .setColor('#FFFFFF')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+        }
+    } else if(message.channel.id === commandsChannelID) {
+        if(message.content.startsWith('\/')) {
+            const Chat = new MessageEmbed()
+              .setColor('#808080')
+              .setTitle(message.content)
+      
+            message.channel.send({ embeds: [Chat]});
+            await message.delete();
+        }
+    }
+});
+
+
+
+discordBot.login(process.env.token1)
