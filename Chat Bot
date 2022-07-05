@@ -10,11 +10,14 @@ const discordBot = new Discord.Client({
   intents: [Discord.Intents.FLAGS.GUILD_MESSAGES],
 });
 
-let bot = mineflayer.createBot({
+const options = {
   host: 'massivecraft.com',
-  username: 'NjMcr',
+  username: 'NjMcrs',
   auth: 'microsoft'
-});
+};
+
+let bot = mineflayer.createBot(options);
+
 
 const discordServerID = '948995127148425246';
 const chatChannelID = '987349559724372059';
@@ -25,6 +28,10 @@ const pmChannelID = '991327518579769394';
 const kingdomChannelID = '991287691205410816';
 const miscChannelID = '991287797203882044';
 const commandsChannelID = '991365232867934208';
+const announcementChannelID = '991677008054583326';
+const loginsChannelID = '991676737391968366';
+const staffChannelID = '991697826436362280';
+const functionalChannelID = '991701680297082940';
 
 app.listen(3000, () => {
   console.log("Project is running!");
@@ -42,9 +49,21 @@ bot.on('login', () => {
   console.log('Minecraft bot has logged in!');
 });
 
+bot.on('spawn', () => {
+  toLoginsChat('❂ NjMcr logged on');
+})
 
 bot.on('end', () => {
   console.log('Minecraft bot disconnected from the server.');
+  toLoginsChat('NjMcr logged off');
+  setTimeout(bot, 3000)
+});
+
+bot.on('kicked', reason => {
+  console.log(reason);
+  toLoginsChat('NjMcr logged off');
+  toLoginsChat(reason);
+  setTimeout(bot, 3000)
 });
 
 async function toDiscordChat(msg) {
@@ -103,6 +122,36 @@ async function toCommandsChat(msg) {
   });
 }
 
+async function toAnnouncementChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(announcementChannelID).send({
+    content: msg,
+  });
+}
+
+
+async function toLoginsChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(loginsChannelID).send({
+    content: msg,
+  });
+}
+
+async function toStaffChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(staffChannelID).send({
+    content: msg,
+  });
+}
+
+async function toFunctionalChat(msg) {
+  await discordBot.guilds.cache.get(discordServerID).channels.fetch();
+  return discordBot.guilds.cache.get(discordServerID).channels.cache.get(functionalChannelID).send({
+    content: msg,
+  });
+}
+
+
 discordBot.on('messageCreate', async (message) => {
     if (message.channel.id === chatChannelID) {
       if(message.author.id === '530880318463541248') {
@@ -145,46 +194,79 @@ discordBot.on('messageCreate', async (message) => {
             await message.delete();
             toCommandsChat(`\/${message}`);
           }
+    }  else if (message.channel.id === staffChannelID) {
+          if(message.author.id === '530880318463541248') {
+            bot.chat(`s: ${message.content}`);
+            await message.delete();
+          }
     }
 })
             
 
 bot.on('message', (jsonMsg, position) => {
-  if(position === 'system') {
-    toDiscordChat(`[System] ${jsonMsg}`);
-  }  else if(position === 'game_info') {
-      toDiscordChat(`[Game] ${jsonMsg}`)
-  }  else if(position === 'chat') {
-      const jsonstr = JSON.stringify(jsonMsg);
-      const jsonobj = JSON.parse(jsonstr);
-      console.log(jsonobj);
-      console.log(jsonobj.color);
-        if(jsonobj.color === 'dark_green') {
-          toFactionChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'gray') {
-          toGeneralChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'dark_purple') {
-          toAllyChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'light_purple') {
-          toPmChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'dark_aqua') {
-          toKingdomChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'yellow') {
-          toMiscChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'gold') {
-          toMiscChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'aqua') {
-          toMiscChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'dark_red') {
-          toMiscChat(`${jsonMsg}`);
-        } else if(jsonobj.color === 'red') {
-          toMiscChat(`${jsonMsg}`);
-        } else toDiscordChat(`[Chat] ${jsonMsg}`)
-    }
+    if(position === 'system') {
+      if(jsonMsg != ""){
+        toDiscordChat(`${jsonMsg}`);
+      }
+    }  else if(position === 'game_info') {
+          if(jsonMsg != "") {
+          toDiscordChat(`${jsonMsg}`);
+        }
+    }  else if(position === 'chat') {
+        const jsonstr = JSON.stringify(jsonMsg);
+        const jsonobj = JSON.parse(jsonstr);
+        console.log(jsonobj.color);
+          if(jsonobj.color === 'dark_green') {
+            toFactionChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'gray') {
+            toGeneralChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'dark_purple') {
+            toAllyChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'light_purple') {
+            toPmChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'dark_aqua') {
+            toKingdomChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'yellow') {
+            toMiscChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'gold') {
+            toMiscChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'aqua') {
+            toMiscChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'dark_red') {
+            toFunctionalChat(`${jsonMsg}`);
+          } else if(jsonobj.color === 'red') {
+            toStaffChat(`${jsonMsg}`);
+          } else if(jsonMsg != "") {
+            toDiscordChat(`${jsonMsg}`);
+          }
+      }
 })
 
 
-discordBot.on("message", async (message) => {
+discordBot.on("messageCreate", async (message) => {
+  if(message.channel.id === chatChannelID) {
+    if(message.content.includes(' logged o')) {
+      toLoginsChat(message.content);
+      await message.delete();
+    } else if(message.content.startsWith("\[A\]")) {
+      toAnnouncementChat(message.content);
+      await message.delete();
+    } 
+  } 
+});
+
+discordBot.on("messageCreate", async (message) => {
+  if(message.channel.id === functionalChannelID) {
+    if(message.content.startsWith("\[C\]")) {
+      toStaffChat(message.content);
+    } else if(message.content.startsWith ("\[PVP ")) {
+      toMiscChat(message.content);
+    }
+  }
+});
+
+
+discordBot.on("messageCreate", async (message) => {
     if(message.content.includes("Faction")) {
       if(message.channel.id === factionChannelID) {
         const FactionChat = new MessageEmbed()
@@ -224,7 +306,7 @@ discordBot.on("message", async (message) => {
     } else if(message.content.startsWith("TO ")) {
           if(message.channel.id === pmChannelID) {
             const Chat = new MessageEmbed()
-              .setColor('#CF9FFF')
+              .setColor('FFFFE0')
               .setTitle(message.content)
       
             message.channel.send({ embeds: [Chat]});
@@ -276,7 +358,7 @@ discordBot.on("message", async (message) => {
             await message.delete();
           }
     } else if(message.content.startsWith("\[Staff ")) {
-          if(message.channel.id === miscChannelID) {
+          if(message.channel.id === staffChannelID) {
             const Chat = new MessageEmbed()
               .setColor('#FF0000')
               .setTitle(message.content)
@@ -284,15 +366,15 @@ discordBot.on("message", async (message) => {
             message.channel.send({ embeds: [Chat]});
             await message.delete();
           }
-    } else if(message.content.includes(" logged o")) {
-        if(message.channel.id === chatChannelID) {
+    } else if(message.channel.id === loginsChannelID) {
+        if(message.content.includes(' logged o')) {
             const Chat = new MessageEmbed()
               .setColor('#FFFFFF')
               .setTitle(message.content)
       
             message.channel.send({ embeds: [Chat]});
             await message.delete();
-          }
+        }
     } else if(message.channel.id === commandsChannelID) {
         if(message.content.startsWith('\/')) {
             const Chat = new MessageEmbed()
@@ -304,6 +386,7 @@ discordBot.on("message", async (message) => {
         }
     }
 });
+
 
 
 discordBot.login(process.env.token1)
